@@ -1,1 +1,1 @@
-<h1>Website for the Ball of Duty event</h1>
+<h1>Website for the Ball of Duty event built using Jinja2, Flask, and PyMongo</h1>
