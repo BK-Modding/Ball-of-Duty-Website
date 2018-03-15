@@ -55,8 +55,9 @@ def register():
             connection.close()
             
         samakshdetails = ''
-        if paymentmode == "'payTM'":
-            samakshdetails = "To make the payTM payment for the event, please pay Samaksh Goel of IBDP 1 studying in Oakridge International School. His mobile no. is 9036492611"
+        print(paymentmode)
+        if paymentmode == "payTM":
+            samakshdetails = "To make the payTM payment for the event, please pay Samaksh Goel of IBDP 1 studying in Oakridge International School. His mobile no. is +919036492611"
 
         return json.dumps({'status':'Registered', 'samakshdetails':samakshdetails});
     
