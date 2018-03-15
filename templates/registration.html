@@ -1,11 +1,115 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block content %}
+<script type="text/javascript">
+    function register() {
+        var registername = document.getElementById("registermember").value;
+        var teamname = document.getElementById("teamname").value;
+        var noofmembers = document.getElementById("members").value;
+        var membernames = document.getElementById("membernames").value.split(",");
+        var email = document.getElementById("email").value;
+        var mobileno = document.getElementById("mobileno").value;
+        var alternateno = document.getElementById("alternateno").value;
+        var paymenttype = $('input[name=paygroup]:checked').val();
+        console.log(paymenttype);
+        
+        if(registername.length > 0 && teamname.length > 0 && (noofmembers >= 5 && noofmembers <= 9) && membernames.length > 0 && email.length > 0 && mobileno.length == 10 && alternateno.length == 10 && paymenttype.length > 0)
+        {
+            if(!(membernames.length == noofmembers))
+            {
+                    Materialize.toast("<p class = 'green-text'>Error, the no. of members entered does not match the number of member names</p>", 2000)
+            }
+            else
+            {
+                for(let member of membernames)
+                {
+                    membernames[membernames.indexOf(member)] = member.trim();
+                }
+        
+                console.log(membernames);
+        
+                var registerdata = {
+                    registername: registername,
+                    teamname: teamname,
+                    noofmembers: noofmembers,
+                    membernames: membernames,
+                    email : email,
+                    mobileno : mobileno,
+                    alternateno : alternateno,
+                    paymenttype: paymenttype
+                };
+       
+                $.ajax({
+                    url: './register',
+                    dataType: "json",
+                    data: JSON.stringify(registerdata),
+                    contentType: "application/json",
+                    type: 'POST',
+                    success: function(response) {
+                        console.log(response);
+                        Materialize.toast("<p class = 'green-text'>You've successfully registered, please complete the payment to confirm your registration</p>", 2000)
+                    },
+                    error: function(error) {
+                        Materialize.toast("<p class = 'red-text'>" + error + "</p>", 2000)
+                    }
+                });      
+            }
+        }
+        else
+        {
+            Materialize.toast("<p class = 'red-text'>Error, some fields are not filled or are filled incorrectly</p>", 2000);
+        }
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-title flow-text center-align">Register for the event</div>
+                <div class="card-content">
+                    <div class="input-field">
+                        <label for="registermember">Name of person registering</label>
+                        <input type="text" required validate name="registermember" id="registermember" placeholder="Name of person registering">
+                    </div>
+                    <div class="input-field">
+                        <label for="teamname">Team name</label>
+                        <input type="text" required class="validate" name="teamname" id="teamname" placeholder="Team name">
+                    </div>
+                    <div class="input-field">
+                        <label for="members">No. of members (5 to 9)</label>
+                        <input type="number" required class="validate" max=9 min=5 name="members" id="members" placeholder="No. of members" maxlength=9>
+                    </div>
+                    <div class="input-field">
+                        <label for="membernames">Names of members (separated by a comma)</label>
+                        <input type="text" required class="validate" name="membernames" id="membernames" placeholder="Names of members (separated by a comma)">
+                    </div>
+                    <div class="input-field">
+                        <label for="email">Email of the person registering</label>
+                        <input type="email" required class="validate" name="email" id="email" placeholder="Email of the person registering">
+                    </div>
+                    <div class="input-field">
+                        <label for="mobileno">Mobile no. of the person registering</label>
+                        <input type="number" required class="validate" name="mobileno" id="mobileno" placeholder="Mobile no. of the person registering">
+                    </div>
+                    
+                    <div class="input-field">
+                        <label for="alternateno">Alternate Mobile no.</label>
+                        <input type="number" required class="validate" name="alternateno" id="alternateno" placeholder="Alternate Mobile no.">
+                    </div>
 
-{% block content %}
-    <div class = "container">
-        <div class = "row">
-            <div class = "col s12">
-                Kappa
+                    <p>
+                        <input name="paygroup" type="radio" value = "cash" id="cash" />
+                        <label for="cash">Cash</label>
+                    </p>
+                    <p>
+                        <input checked="checked" name="paygroup" value = "payTM" type="radio" id="payTM" />
+                        <label for="payTM">PayTM</label>
+                    </p>
+                    
+                    Before you register, we recommend you read the <a href = "/termsandconditions">Terms and conditions</a>
+                    
+                    <a class="btn blue" onclick="register();">Register</a>
+                </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}

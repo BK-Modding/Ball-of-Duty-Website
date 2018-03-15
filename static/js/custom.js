@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $('.parallax').parallax();
+    $('select').material_select();
 });
 $('a[href^="#"]').on('click', function(e) {
     e.preventDefault();
