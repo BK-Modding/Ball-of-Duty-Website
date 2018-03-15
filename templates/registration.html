@@ -15,46 +15,53 @@
         {
             if(!(membernames.length == noofmembers))
             {
-                Materialize.toast("<p class = 'green-text'>Error, the no. of members entered does not match the number of member names</p>", 2000)
+                Materialize.toast("<p class = 'red-text'>Error, the no. of members entered does not match the number of member names</p>", 2000)
             }
             else
             {
-                for(let member of membernames)
+                if(mobileno == alternateno)
                 {
-                    membernames[membernames.indexOf(member)] = member.trim();
+                    Materialize.toast("<p class = 'red-text'>Error, the registering mobile no. and the alternate mobile no. must be different</p>", 2000)
                 }
-        
-                console.log(membernames);
-        
-                var registerdata = {
-                    registername: registername,
-                    teamname: teamname,
-                    noofmembers: noofmembers,
-                    membernames: membernames,
-                    email : email,
-                    mobileno : mobileno,
-                    alternateno : alternateno,
-                    paymenttype: paymenttype
-                };
-       
-                $.ajax({
-                    url: './register',
-                    dataType: "json",
-                    data: JSON.stringify(registerdata),
-                    contentType: "application/json",
-                    type: 'POST',
-                    success: function(response) {
-                        console.log(response);
-                        Materialize.toast("<p class = 'green-text'>You've successfully registered, please complete the payment to confirm your registration</p>", 2000);
-                        if(response.samakshdetails != ' ')
-                        {
-                            document.getElementById("registercomplete").innerHTML = response.samakshdetails;   
-                        }
-                    },
-                    error: function(error) {
-                        Materialize.toast("<p class = 'red-text'>" + error + "</p>", 2000)
+                else
+                {
+                    for(let member of membernames)
+                    {
+                        membernames[membernames.indexOf(member)] = member.trim();
                     }
-                });      
+        
+                    console.log(membernames);
+        
+                    var registerdata = {
+                        registername: registername,
+                        teamname: teamname,
+                        noofmembers: noofmembers,
+                        membernames: membernames,
+                        email : email,
+                        mobileno : mobileno,
+                        alternateno : alternateno,
+                        paymenttype: paymenttype
+                    };
+       
+                    $.ajax({
+                        url: './register',
+                        dataType: "json",
+                        data: JSON.stringify(registerdata),
+                        contentType: "application/json",
+                        type: 'POST',
+                        success: function(response) {
+                            console.log(response);
+                            Materialize.toast("<p class = 'green-text'>You've successfully registered, please complete the payment to confirm your registration</p>", 2000);
+                            if(response.samakshdetails.length > 0)
+                            {
+                                document.getElementById("registercomplete").innerHTML = '<div class = "card-content white-text purple center-align">' +  response.samakshdetails + '</div>';   
+                            }
+                        },
+                        error: function(error) {
+                            Materialize.toast("<p class = 'red-text'>" + error + "</p>", 2000)
+                        }
+                    });     
+                }
             }
         }
         else
@@ -120,10 +127,7 @@
                         </div>
                     </div>
                     <br>
-                    <div class = "card">
-                        <div id = "registercomplete" class = "card-content white-text purple center-align">
-                            
-                        </div>
+                    <div id = "registercomplete" class = "card">
                     </div>
                 </div>
             </div>
