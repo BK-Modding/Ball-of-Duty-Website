@@ -3,6 +3,9 @@ $(document).ready(function() {
     $('select').material_select();
     $('ul.tabs').tabs();
     $('.collapsible').collapsible();
+    $(document).ready(function() {
+        $('select').material_select();
+    });
 });
 $('a[href^="#"]').on('click', function(e) {
     e.preventDefault();

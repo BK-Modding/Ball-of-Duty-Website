@@ -1,20 +1,28 @@
 {% extends "layout.html" %} 
 {% block content %}
 <script type="text/javascript">
-    function teampaid() 
+    function paid() 
+    {
+        var name = document.getElementById("name").value;
+        var repass = document.getElementById("repassphrase").value;
+        var sport = document.getElementById("game").value;
+        console.log(name);
+        console.log(repass);
+
+        if(sport.length < 1)
         {
-            var teamname = document.getElementById("teamname").value;
-            var repass = document.getElementById("repassphrase").value;
-            console.log(teamname);
-            console.log(repass);
-            
+            Materialize.toast('<p class = "flow-text red-text">Error, no game/sport chosen</p>', 2000)
+        }
+        else
+        {
             var data = {
-                teamname: teamname,
+                name: name,
+                sport: sport,
                 repass: repass
             }
-            
+
             $.ajax({
-                url: "./confirmteampayment",
+                url: "./confirmpayment",
                 type: "POST",
                 data: JSON.stringify(data),
                 dataType: "json",
@@ -33,13 +41,14 @@
                 error: function (error) {
                     Materialize.toast('<p class = "flow-text red-text">' + error + '</p>', 2000)
                 }
-            })
+            })   
         }
+    }
     function enterphrase() {
         var data = {
             passphrase: document.getElementById("passphrase").value
         } 
-        
+
         $.ajax({
             url: "./checkpass",
             type: "POST",
@@ -50,7 +59,7 @@
                 if(response.correct == 'true')
                 {
                     Materialize.toast('<p class = "flow-text green-text">Logged in successfully</p>', 2000)
-                    document.getElementById('state').innerHTML = '<div class = "card"><div class = "card-content"><div class = "input-field"><label for = "teamname">Team name</label><input type = "text" name = "teamname" id = "teamname" placeholder = "Team name"></div><div class = "input-field"><label for = "repassphrase">Reenter pass phrase</label><input type = "text" name = "repassphrase" id = "repassphrase" placeholder = "Reenter pass phrase"></div><a onclick = "teampaid()" class = "btn red waves-effect hoverable">Confirm</a></div></div>'
+                    document.getElementById('state').innerHTML = '<div class = "card"> <div class = "card-content"> <div class = "input-field"> <label for = "name">Name/Team name</label> <input type = "text" name = "name" id = "name" placeholder = "Name/Team name"> </div> <div class = "input-field"> <label for = "repassphrase">Reenter pass phrase</label> <input type = "text" name = "repassphrase" id = "repassphrase" placeholder = "Reenter pass phrase"/> </div> <div class="input-field"> <select id = "game"> <option value="" selected>Choose the sport/game</option> <option value="football">Football</option> <option value="basketball">Basketball</option> <option value="chess">Chess</option> </select> <label>Choose the sport/game</label> </div> <a onclick = "paid()" class = "btn red waves-effect hoverable">Confirm</a> </div></div>';
                 }
                 else
                 {
