@@ -51,10 +51,14 @@
                         type: 'POST',
                         success: function(response) {
                             console.log(response);
-                            Materialize.toast("<p class = 'green-text'>You've successfully registered, please complete the payment to confirm your registration</p>", 2000);
-                            if(response.samakshdetails.length > 0)
+                            if(response.Status == "Registered")
                             {
-                                document.getElementById("registercomplete").innerHTML = '<div class = "card-content white-text purple center-align">' +  response.samakshdetails + '</div>';   
+                                Materialize.toast("<p class = 'green-text'>You've successfully registered, please complete the payment to confirm your registration</p>", 2000);
+                                document.getElementById("registercomplete").innerHTML = '<div class = "card-content white-text purple center-align">Thank you for your registration, an email regarding further details and actions to be taken to complete your payment has been sent to the registered email account.</div>';   
+                            }
+                            else
+                            {
+                                Materialize.toast('<p class = "flow-text red-text">' + response.Message + '</p>', 2000)
                             }
                         },
                         error: function(error) {
