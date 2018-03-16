@@ -151,6 +151,20 @@ def confirmteampayment():
                     cursor.execute(insertquery)
                 
                     connection.commit()
+                    
+                    cursor.execute('''SELECT Email FROM registrations WHERE TeamName=%s''' % str(team))
+                    
+                    teamdata = cursor.fetchall()
+                    email = teamdata[0]['Email']
+                    
+                    msg = Message('A team has completed payment', sender = config.MAIL_USERNAME, recipients = [config.RECIPIENT_1, config.RECIPIENT_2, config.RECIPIENT_3, config.RECIPIENT_4, config.RECIPIENT_5])
+                    msg.body = "The team with the teamname {} has completed the payment successfully. Samaksh you better have the cash.".format(team)
+                    mail.send(msg)
+                    
+                    msg2 = Message('Payment confirmation for the Ball Of Duty event', sender = config.MAIL_USERNAME, recipients = [email])
+                    msg2.body = "Thank you for your payment for the Ball Of Duty event. This is to confirm that the payment has been completed successfully. We hope to see you there :)"
+                    mail.send(msg2)
+                    
                     return json.dumps({'success': 'true', 'message': 'Successfully updated!'})
     
 if __name__ == "__main__":
