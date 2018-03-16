@@ -168,9 +168,9 @@ def checkpass():
             return json.dumps({'correct':'false'})
             
             
-@app.route('/getallteams')
+@app.route('/getallregistrations')
 def getallteams():
-    return render_template('getallteams.html')
+    return render_template('getallregistrations.html')
     
 @app.route('/getteamsafterauth/<sport>', methods = ['GET', 'POST'])
 def getteamsafterauth(sport):
@@ -203,7 +203,6 @@ def confirmteampayment():
     if repass != config.PASSPHRASE:
         return json.dumps({'success': 'false', 'message': 'Error, incorrect pass phrase'})
     else:
-        print(sport)
         print(sport == 'chess')
         with connection.cursor() as cursor:
             if sport == 'football':

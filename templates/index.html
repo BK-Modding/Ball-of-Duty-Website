@@ -1,11 +1,31 @@
 {% extends "layout.html" %} {% block content %}
 <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" media="screen,projection" />
+<!-- <div class="parallax-container">
+  <div class="section no-pad-bot">
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row">
+      <div class="col s12 center-align">
+        <h1 class="black-text">Football</h1>
+        <h1 class="black-text">14th - 15th April</h1>
+        <p class="flow-text black-text">Be there</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="parallax"><img class="responsive-img" src="{{ url_for('static', filename='images/turfpark.jpg') }}"></div>
+    </div>
+  </div>
+</div> -->
 <div class="slider">
     <ul class="slides">
       <li>
         <img class = "responsive-img" src="{{ url_for('static', filename='images/turfpark.jpg') }}"> <!-- random image -->
         <div class="caption center-align">
-          <h3>14th - 15th April</h3>
+          <h3 class="light white-text">14th - 15th April</h3>
           <h5 class="light white-text">Be there</h5>
         </div>
       </li>
@@ -19,8 +39,8 @@
       <li>
         <img src="{{ url_for('static', filename='images/basketball.jpg') }}"> 
         <div class="caption center-align">
-          <h3 class = "white-text">Coming soon!</h3> 
-          <h5 class="light white-text text-lighten-3"></h5>
+          <h3 class = "black-text">Coming soon!</h3> 
+          <h5 class="black-text"></h5>
         </div>
       </li>
     </ul>
@@ -79,8 +99,8 @@
             <div id="q1">
               <ul class="collapsible" data-collapsible="accordion">
                 <li>
-                  <div class="collapsible-header">What is the registration fee for the football tournament?</div>
-                  <div class="collapsible-body"><span>The registration fee for the football event is &#8377;2899 per team. The registration fee for the chess tournament is &#8377;2899. The registration fee for the basketball one is yet to be decided </span></div>
+                  <div class="collapsible-header">What is the registration fee for the tournaments?</div>
+                  <div class="collapsible-body"><span>The registration fee for the football event is &#8377;2899 per team. The registration fee for the chess tournament depends whether you have an UKCA ID or not. The initial fee is &#8377;2899 but you have to pay &#8377;50 extra if you don't have the ID. The registration fee for the chess tournament is yet to be decided.</span></div>
                 </li>
                 <li>
                   <div class="collapsible-header">How do I pay the amount?</div>
@@ -101,11 +121,11 @@
                 </li>
                 <li>
                   <div class="collapsible-header">How long will the event last?</div>
-                  <div class="collapsible-body"><span>The event will last 2 days, over the weekend of the 14th and 15th April, 2018. If you win on day 1 and qualify for the next round, you will be required to come on day 2. If you do not qualify on day 1, you may come on day 2 to spectate.</span></div>
+                  <div class="collapsible-body"><span>The event will last 2 days, over the weeekend of the 14th and 15th April, 2018. If you win on day 1 and qualify for the next round, you will be required to come on day 2. If you do not qualify on day 1, you may come on day 2 to spectate.</span></div>
                 </li>
                 <li>
                   <div class="collapsible-header">Who is the event being organised by?</div>
-                  <div class="collapsible-body"><span>The event is being organised by a group of sports enthusiastic students who want to use sports to make the world a better place.</span></div>
+                  <div class="collapsible-body"><span>The event is being organised by a group of students.</span></div>
                 </li>
               </ul>
             </div>
