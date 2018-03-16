@@ -17,15 +17,16 @@
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
-     <script type="text/javascript" src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/custom.js') }}"></script>
 
     <nav>
         <div class="nav-wrapper white">
-            <a href="/" class="brand-logo left-align black-text"><img width = "85px" height = "63px" src = "{{ url_for('static', filename='images/logo.jpg') }}"></a>
+            <a href="/" class="brand-logo left black-text"><img style = "position:absolute;left:5px;" width = "65px" height = "65px" src = "{{ url_for('static', filename='images/logo.jpg') }}"></a>
             <ul class="right">
                 <li><a href="/#introduction" class="btn-flat">Introduction</a></li>
                 <li><a href="/#faq" class="btn-flat">FAQ</a></li>
                 <li><a href="/termsandconditions" class="btn-flat">Terms and Conditions</a></li>
+               <li><a href="/#gallery" class="btn-flat">Gallery</a></li>
                 <li><a href="/registration" class="btn-flat">Register</a></li>
             </ul>
         </div>
@@ -56,7 +57,7 @@
         <div class="footer-copyright">
             <div class="container">
                 © 2018 Copyright Ball of Duty
-                <span class="grey-text text-lighten-4 right" href="#!"><> by <a href = "https://github.com/BK-Modding">BK-Modding</a></span>
+                <span class="grey-text text-lighten-4 right" href="#!"><> by <a href = "https://github.com/BK-Modding">BK-Modding</a>, <a href = "https://github.com/LaserTrajectory">Laser Trajectory</a></span>
             </div>
         </div>
     </footer>

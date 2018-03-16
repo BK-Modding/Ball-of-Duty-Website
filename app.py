@@ -47,7 +47,7 @@ def register(sport):
                     else:
                         if isinstance(data[i], int):
                             data[i] = connection.escape(int(data[i]))
-                        else:
+                        elif i != 'email':
                             data[i] = connection.escape(data[i])
                 print(data)
                 existflag = 0
@@ -78,7 +78,7 @@ def register(sport):
                     connection.commit()
             
                     msg = Message('We have a new registration under Football for Sports for Change', sender = config.MAIL_USERNAME, recipients = [config.RECIPIENT_1, config.RECIPIENT_2, config.RECIPIENT_3, config.RECIPIENT_4, config.RECIPIENT_5])
-                    msg.body = "Team name: {} \n Registration Person: {} \n No. of members in the team: {} \n Member Names: {} \n Mobile no: {} \n Alternate no: {} \n Payment mode chosen: {}".format(teamname, registername, noofmembers, membernames, mobileno, alternateno, paymentmode)
+                    msg.body = "Team name: {} \nRegistration Person: {}\n No. of members in the team: {}\nMember Names: {}\nMobile no: {}\nAlternate no: {} \nPayment mode chosen: {}".format(teamname, registername, noofmembers, membernames, mobileno, alternateno, paymentmode)
                     mail.send(msg)
             
                     msg2 = Message('Confirming your registration for Sports for Change', sender = config.MAIL_USERNAME, recipients = [data['email']])
@@ -92,9 +92,7 @@ def register(sport):
                     mail.send(msg2)
             elif sport == 'chess':
                 for i in data:
-                    if isinstance(data[i], int):
-                        data[i] = connection.escape(int(data[i]))
-                    else:
+                    if i != 'email' and not isinstance(data[i], int):
                         data[i] = connection.escape(data[i])
                 print(data)
                 existflag = 0
@@ -103,7 +101,6 @@ def register(sport):
                     cursor.execute(existquery % data['name'])
                     if len(cursor.fetchall()) > 0:
                         existflag = 1
-                        
                 if existflag == 1:
                     return json.dumps({'Status':'Not Registered', 'Message': 'Error, that name has already registered'});
                 else:
@@ -111,30 +108,37 @@ def register(sport):
                     age = data['age']
                     paymentmode = data['paymenttype']
                     mobileno = data['mobileno']
+                    print(mobileno)
                     email = data['email']
                     category = data['category']
-                    UKCAID = 1 if data['UKCAID'] == 'true' else 2
+                    UKCAID = "true" if data['UKCAID'] == 1 else "false"
                     
                     with connection.cursor() as cursor:
-                        query = '''INSERT INTO chessregistrations (Name, Email, MobileNo, Age, Category, PaymentMode, HasUKCA) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
-                        print(query)
-                        insertdata = (name, email, mobileno, age, category, paymentmode, UKCAID)
+                        query = '''INSERT INTO chessregistrations (Name, Email, MobileNo, Age, Category, PaymentMode, HasUKCA) VALUES (%s, %s, %s, %s, %s, %s, %s)'''
+                        insertdata = (name, email, mobileno, age, category, paymentmode, data['UKCAID'])
                         cursor.execute(query, insertdata)
         
                     connection.commit()
             
                     msg = Message('We have a new registration under Chess for Sports for Change', sender = config.MAIL_USERNAME, recipients = [config.RECIPIENT_1, config.RECIPIENT_2, config.RECIPIENT_3, config.RECIPIENT_4, config.RECIPIENT_5])
-                    msg.body = "Name: {} \n Email: {} \n Mobile no.: {} \n Age: {} \n Category: {} \n Payment mode chosen: {} \n Has an UKCA ID: {}".format(name, email, mobileno, age, category, paymentmode, data['UKCAID'])
+                    msg.body = "Name: {} \nEmail: {} \nMobile no.: {}\n Age: {}\nCategory: {}\nPayment mode chosen: {}\nHas an UKCA ID: {}".format(name, email, mobileno, age, category, paymentmode, UKCAID)
                     mail.send(msg)
             
-                    msg2 = Message('Confirming your registration for Sports for Change', sender = config.MAIL_USERNAME, recipients = [data['email']])
+                    msg2 = Message('Confirming your registration for Sports for Change', sender = config.MAIL_USERNAME, recipients = [email])
                     paymsg = ''
+                    msgcategory = ''
+                    if category == 'u8':
+                        msgcategory = "Under 8"
+                    elif category == 'u12':
+                        msgcategory = "Under 12"
+                    elif category == "u16":
+                        msgcategory = "Under 16"
                     if paymentmode == "payTM":
                         paymsg = "You have chosen to pay the registration fee through PayTM. To make the PayTM payment for the event, please pay Samaksh Goel of IBDP 1 studying in Oakridge International School. His mobile no. is +919036492611"
                     else:
-                        paymsg = "You have chosen to pay the registration fee by cash. Please make the cash payment once you arrive at the venue on the event day"
+                        paymsg = "You have chosen to pay the registration fee by cash. To make the cash payment, one of our representatives will get in touch with you soon. If the representative does not get in touch with you in the next 24 hours, please contact us through the contact number provided at the bottom of the website. Please do keep in mind that you must make the payment before 9th of April"
                 
-                    msg2.body = "Thank you for registering under Chess for Sports for Change. This is to confirm that you have registered for the event under the name of {} and under the {} category. {}".format(name, category, paymsg)
+                    msg2.body = "Thank you for registering under Chess for Sports for Change. This is to confirm that you have registered for the event under the name of {} and under the {} category. {}".format(name, msgcategory, paymsg)
                     mail.send(msg2)
             
             elif sport == 'basketball':
@@ -168,17 +172,27 @@ def checkpass():
 def getallteams():
     return render_template('getallteams.html')
     
-@app.route('/getteamsafterauth', methods = ['GET', 'POST'])
-def getteamsafterauth():
+@app.route('/getteamsafterauth/<sport>', methods = ['GET', 'POST'])
+def getteamsafterauth(sport):
     if request.method == "POST":
         data = request.get_json()
         if data['passphrase'] == config.PASSPHRASE2:
             with connection.cursor() as cursor:
-                cursor.execute('SELECT * FROM registrations');
-                querydata = cursor.fetchall()
-                return json.dumps({'success':'true', 'teams': querydata})
+                if sport == 'football':
+                    cursor.execute('SELECT * FROM footballregistrations');
+                    querydata = cursor.fetchall()
+                    return json.dumps({'success':'true', 'teams': querydata})
+                elif sport == 'chess':
+                    cursor.execute('SELECT * FROM chessregistrations');
+                    querydata = cursor.fetchall()
+                    return json.dumps({'success':'true', 'data': querydata})
+                elif sport == 'basketball':
+                    cursor.execute('SELECT * FROM basketballregistrations');
+                    querydata = cursor.fetchall()
+                    return json.dumps({'success':'true', 'teams': querydata})
+                    
         else:
-            return json.dumps({'success': 'false', 'teams': []})
+            return json.dumps({'success': 'false'})
 
 @app.route('/confirmpayment', methods = ['POST'])
 def confirmteampayment():
@@ -189,39 +203,44 @@ def confirmteampayment():
     if repass != config.PASSPHRASE:
         return json.dumps({'success': 'false', 'message': 'Error, incorrect pass phrase'})
     else:
+        print(sport)
+        print(sport == 'chess')
         with connection.cursor() as cursor:
             if sport == 'football':
-                query = '''SELECT * FROM footballregistrations WHERE TeamName=%s''' % str(name)
+                query = '''SELECT * FROM footballregistrations WHERE TeamName="%s"''' % str(name)
             elif sport == 'chess':
-                 query = '''SELECT * FROM chessregistrations WHERE TeamName=%s''' % str(name)
+                 query = '''SELECT * FROM chessregistrations WHERE Name="%s"''' % str(name)
+                 print(query)
             elif sport == 'basketball':
-                 query = '''SELECT * FROM basketballregistrations WHERE TeamName=%s''' % str(name)
+                 query = '''SELECT * FROM basketballregistrations WHERE TeamName="%s"''' % str(name)
             cursor.execute(query)
             dbdata = cursor.fetchall()
             print(dbdata)
             if len(dbdata) == 0:
-                return json.dumps({'success': 'false', 'message': 'Error, team does not exist'})  
+                notexistmessage = 'Error, that team does not exist' if (sport == 'football' or sport == 'basketball') else 'Error, a registration under that name does not exist'
+                return json.dumps({'success': 'false', 'message': notexistmessage})  
             else:
                 if dbdata[0]['HasPaid'] == 1:
                     returnmessage = 'Error, that team has already paid' if (sport == 'football' or sport == 'basketball') else 'Error, the registration under that name has already paid'
                     return json.dumps({'success': 'false', 'message': returnmessage})
                 else:
+                    insertquery = ''
                     if sport == 'football':
-                        insertquery = '''UPDATE footballregistrations SET HasPaid=1 WHERE TeamName=%s''' % str(name)
+                        insertquery = '''UPDATE footballregistrations SET HasPaid=1 WHERE TeamName="%s"''' % str(name)
                     elif sport == 'basketball':
-                        insertquery = '''UPDATE basketballregistrations SET HasPaid=1 WHERE TeamName=%s''' % str(name)
-                    elif sport == 'football':
-                        insertquery = '''UPDATE chessregistrations SET HasPaid=1 WHERE Name=%s''' % str(name)
+                        insertquery = '''UPDATE basketballregistrations SET HasPaid=1 WHERE TeamName="%s"''' % str(name)
+                    elif sport == 'chess':
+                        insertquery = '''UPDATE chessregistrations SET HasPaid=1 WHERE Name="%s"''' % str(name)
                     cursor.execute(insertquery)
                 
                     connection.commit()
                     
                     if sport == 'football':
-                        cursor.execute('''SELECT Email FROM footballregistrations WHERE TeamName=%s''' % str(name))
+                        cursor.execute('''SELECT Email FROM footballregistrations WHERE TeamName="%s"''' % str(name))
                     elif sport == 'basketball':
-                        cursor.execute('''SELECT Email FROM basketballregistrations WHERE TeamName=%s''' % str(name))
+                        cursor.execute('''SELECT Email FROM basketballregistrations WHERE TeamName="%s"''' % str(name))
                     elif sport == 'chess':
-                        cursor.execute('''SELECT Email FROM chessregistrations WHERE Name=%s''' % str(name))
+                        cursor.execute('''SELECT Email FROM chessregistrations WHERE Name="%s"''' % str(name))
                     
                     data = cursor.fetchall()
                     email = data[0]['Email']

@@ -60,6 +60,7 @@
                 {
                     Materialize.toast('<p class = "flow-text green-text">Logged in successfully</p>', 2000)
                     document.getElementById('state').innerHTML = '<div class = "card"> <div class = "card-content"> <div class = "input-field"> <label for = "name">Name/Team name</label> <input type = "text" name = "name" id = "name" placeholder = "Name/Team name"> </div> <div class = "input-field"> <label for = "repassphrase">Reenter pass phrase</label> <input type = "text" name = "repassphrase" id = "repassphrase" placeholder = "Reenter pass phrase"/> </div> <div class="input-field"> <select id = "game"> <option value="" selected>Choose the sport/game</option> <option value="football">Football</option> <option value="basketball">Basketball</option> <option value="chess">Chess</option> </select> <label>Choose the sport/game</label> </div> <a onclick = "paid()" class = "btn red waves-effect hoverable">Confirm</a> </div></div>';
+                    $('select').material_select();
                 }
                 else
                 {

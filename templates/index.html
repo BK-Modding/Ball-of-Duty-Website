@@ -1,24 +1,31 @@
 {% extends "layout.html" %} {% block content %}
 <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" media="screen,projection" />
-<div class="parallax-container">
-  <div class="section no-pad-bot">
-    <div class="row"></div>
-    <div class="row"></div>
-    <div class="row"></div>
-    <div class="row"></div>
-    <div class="row"></div>
-    <div class="row"></div>
-    <div class="row">
-      <div class="col s12 center-align">
-        <h1 class="white-text">14th - 15th April</h1>
-        <p class="flow-text white-text">Be there,</p>
-      </div>
-    </div>
-    <div class="container">
-      <div class="parallax"><img class="responsive-img" src="{{ url_for('static', filename='images/turfpark.jpg') }}"></div>
-    </div>
-  </div>
+<div class="slider">
+    <ul class="slides">
+      <li>
+        <img class = "responsive-img" src="{{ url_for('static', filename='images/turfpark.jpg') }}"> <!-- random image -->
+        <div class="caption center-align">
+          <h3>14th - 15th April</h3>
+          <h5 class="light white-text">Be there</h5>
+        </div>
+      </li>
+      <li>
+        <img class = "responsive-img" src="{{ url_for('static', filename='images/chessboard.jpg') }}"> 
+        <div class="caption center-align">
+          <h3>Coming soon!</h3> 
+          <h5 class="light white-text text-lighten-3"></h5>
+        </div>
+      </li>
+      <li>
+        <img src="{{ url_for('static', filename='images/basketball.jpg') }}"> 
+        <div class="caption center-align">
+          <h3 class = "white-text">Coming soon!</h3> 
+          <h5 class="light white-text text-lighten-3"></h5>
+        </div>
+      </li>
+    </ul>
 </div>
+      
 <section id="introduction">
   <div class="container">
     <div class="row">
@@ -72,25 +79,45 @@
             <div id="q1">
               <ul class="collapsible" data-collapsible="accordion">
                 <li>
-                  <div class="collapsible-header">What is the registration fee</div>
-                  <div class="collapsible-body"><span>The registration fee for this event is &#8377;2800 per team</span></div>
+                  <div class="collapsible-header">What is the registration fee for the football tournament?</div>
+                  <div class="collapsible-body"><span>The registration fee for the football event is &#8377;2899 per team. The registration fee for the chess tournament is &#8377;2899. The registration fee for the basketball one is yet to be decided </span></div>
                 </li>
                 <li>
-                  <div class="collapsible-header">How do I pay the amount</div>
+                  <div class="collapsible-header">How do I pay the amount?</div>
                   <div class="collapsible-body"><span>Before making your payment, you need to have registered on our site. Once that's done, there are two ways to make the payment - one is by PayTM and the other is by cash. If you chose the appropriate payment method during the registration, instructions on how to make the transfer should have been sent to the registered email account with all the other necessary details.</span></div>
                 </li>
                 <li>
-                  <div class="collapsible-header">If I've made the payment through PayTM, how do I know I've done so</div>
+                  <div class="collapsible-header">If I've made the payment through PayTM, how do I know I've done so?</div>
                   <div class="collapsible-body"><span>After you've made the payment through PayTM, one of our representative will update that you've done so and you should receive an email regarding the completion of your payment</span></div>
                 </li>
               </ul>
             </div>
-            <div id="q2">Test 2</div>
+            <div class="card-content">
+            <div id="q2">
+              <ul class="collapsible" data-collapsible="accordion">
+                <li>
+                  <div class="collapsible-header">Where is the tournament happening/What is the venue?</div>
+                  <div class="collapsible-body"><span>The venue is the Turf Park in Koramangala.</span></div>
+                </li>
+                <li>
+                  <div class="collapsible-header">How long will the event last?</div>
+                  <div class="collapsible-body"><span>The event will last 2 days, over the weekend of the 14th and 15th April, 2018. If you win on day 1 and qualify for the next round, you will be required to come on day 2. If you do not qualify on day 1, you may come on day 2 to spectate.</span></div>
+                </li>
+                <li>
+                  <div class="collapsible-header">Who is the event being organised by?</div>
+                  <div class="collapsible-body"><span>The event is being organised by a group of sports enthusiastic students who want to use sports to make the world a better place.</span></div>
+                </li>
+              </ul>
+            </div>
             <div id="q3">Test 3</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</section>
+<hr>
+<section class = "venue">
+  
 </section>
 {% endblock %}

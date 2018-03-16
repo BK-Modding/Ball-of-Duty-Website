@@ -1,35 +1,46 @@
 {% extends "layout.html" %} {% block content %}
 <script type="text/javascript">
     function passphrase() {
-        var data = {
-            passphrase: document.getElementById("passphrase").value
+        if(document.getElementById("game").value.length == 0)
+        {
+            Materialize.toast('<p class = "flow-text red-text">Error, no sport/game chosen</p>', 2000)
         }
-
-        $.ajax({
-            url: "./getteamsafterauth",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            success: function(response) {
-                if (response.success == 'true') {
-                    Materialize.toast('<p class = "flow-text green-text">Logged in successfully</p>', 2000)
-                    var tabledata = "";
-                    console.log(response.teams);
-                    for(var i = 0; i < response.teams.length; i++)
-                    {
-	                    tabledata += "<tr><td>" + response.teams[i].RegistrationPerson + "</td><td>" + response.teams[i].TeamName + "</td><td>" + response.teams[i].NoOfMembers + "</td><td>" + response.teams[i].MemberNames + "</td><td>" + response.teams[i].PaymentMode + "</td><td>" + response.teams[i].MobileNo + "</td><td>" + response.teams[i].AlternateNo + "</td><td>" + response.teams[i].Email + "</td></tr>"	
-                    }
-                    document.getElementById("status").innerHTML = '<div class = "card"><div class = "card-content"><table class = "striped bordered responsive-table"><thead><tr><td><b>Registration Person</b></td><td><b>Team Name</b></td><td><b>No. of members</b></td><td><b>Member Names</b></td><td><b>Payment Mode</b></td><td><b>Mobile no.</b></td><td><b>Alternate no.</b></td><td><b>Email</b></td></tr></thead><tbody>' + tabledata + '</tbody><table></div></div>';
-                }
-                else {
-                    Materialize.toast('<p class = "flow-text red-text">Error, invalid passphrase</p>', 2000)
-                }
-            },
-            error: function(error) {
-                Materialize.toast('<p class = "flow-text red-text">' + error + '</p>', 2000)
+        else
+        {
+            var data = {
+                passphrase: document.getElementById("passphrase").value,
             }
-        })
+
+            $.ajax({
+                url: "./getteamsafterauth/" + document.getElementById("game").value,
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (response.success == 'true') {
+                        Materialize.toast('<p class = "flow-text green-text">Logged in successfully</p>', 2000)
+                        var tabledata = "";
+                        if(document.getElementById("game").value == "football")
+                        {
+                            console.log(response.teams);
+                            for(var i = 0; i < response.teams.length; i++)
+                            {
+                                tabledata += "<tr><td>" + response.teams[i].RegistrationPerson + "</td><td>" + response.teams[i].TeamName + "</td><td>" + response.teams[i].NoOfMembers + "</td><td>" + response.teams[i].MemberNames + "</td><td>" + response.teams[i].PaymentMode + "</td><td>" + response.teams[i].MobileNo + "</td><td>" + response.teams[i].AlternateNo + "</td><td>" + response.teams[i].Email + "</td></tr>"	
+                            }
+                            document.getElementById("status").innerHTML = '<div class = "card"><div class = "card-content"><table class = "striped bordered responsive-table"><thead><tr><td><b>Registration Person</b></td><td><b>Team Name</b></td><td><b>No. of members</b></td><td><b>Member Names</b></td><td><b>Payment Mode</b></td><td><b>Mobile no.</b></td><td><b>Alternate no.</b></td><td><b>Email</b></td></tr></thead><tbody>' + tabledata + '</tbody><table></div></div>';
+
+                        }
+                    }
+                    else {
+                        Materialize.toast('<p class = "flow-text red-text">Error, invalid passphrase</p>', 2000)
+                    }
+                },
+                error: function(error) {
+                    Materialize.toast('<p class = "flow-text red-text">' + error + '</p>', 2000)
+                }
+            })   
+        }
     }
 </script>
 <div class = "row"></div>
@@ -42,6 +53,13 @@
                     <div class="input-field">
                         <label for="passphrase">Enter passphrase</label>
                         <input type="text" name="passphrase" id="passphrase" placeholder="Enter passphrase">
+
+                        <select id = "game">
+                            <option value="" selected>Choose the sport/game</option> 
+                            <option value="football">Football</option> 
+                            <option value="basketball">Basketball</option> 
+                            <option value="chess">Chess</option> 
+                        </select> 
 
                         <a class="btn blue waves-effect" onclick="passphrase();">Enter</a>
                     </div>

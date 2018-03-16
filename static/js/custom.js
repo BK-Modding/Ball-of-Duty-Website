@@ -3,9 +3,13 @@ $(document).ready(function() {
     $('select').material_select();
     $('ul.tabs').tabs();
     $('.collapsible').collapsible();
-    $(document).ready(function() {
-        $('select').material_select();
-    });
+    $('select').material_select();
+    $('.carousel').carousel();
+    $('.slider').slider({
+          full_width: false,
+          interval: 5000,
+          transition: 800,
+          });
 });
 $('a[href^="#"]').on('click', function(e) {
     e.preventDefault();
