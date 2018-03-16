@@ -110,6 +110,48 @@ def checkpass():
             return json.dumps({'correct': 'true'})
         else:
             return json.dumps({'correct':'false'})
+            
+            
+@app.route('/getallteams')
+def getallteams():
+    return render_template('getallteams.html')
+    
+@app.route('/getteamsafterauth', methods = ['GET', 'POST'])
+def getteamsafterauth():
+    if request.method == "POST":
+        data = request.get_json()
+        if data['passphrase'] == config.PASSPHRASE2:
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT * FROM registrations');
+                querydata = cursor.fetchall()
+                return json.dumps({'success':'true', 'teams': querydata})
+        else:
+            return json.dumps({'success': 'false', 'teams': []})
+
+@app.route('/confirmteampayment', methods = ['POST'])
+def confirmteampayment():
+    data = request.get_json()
+    team = connection.escape(data['teamname'])
+    repass = data['repass']
+    if repass != config.PASSPHRASE:
+        return json.dumps({'success': 'false', 'message': 'Error, incorrect pass phrase'})
+    else:
+        with connection.cursor() as cursor:
+            query = '''SELECT * FROM registrations WHERE TeamName=%s''' % str(team)
+            cursor.execute(query)
+            dbdata = cursor.fetchall()
+            print(dbdata)
+            if len(dbdata) == 0:
+                return json.dumps({'success': 'false', 'message': 'Error, team does not exist'})  
+            else:
+                if dbdata[0]['HasPaid'] == 1:
+                    return json.dumps({'success': 'false', 'message': 'Error, that team has already paid'})
+                else:
+                    insertquery = '''UPDATE registrations SET HasPaid=1 WHERE TeamName=%s''' % str(team)
+                    cursor.execute(insertquery)
+                
+                    connection.commit()
+                    return json.dumps({'success': 'true', 'message': 'Successfully updated!'})
     
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)

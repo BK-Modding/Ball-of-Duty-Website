@@ -1,1 +1,1 @@
-<h1>Website for the Ball of Duty event built using Jinja2, Flask, and PyMySQL</h1>
+<h1>Website for the Ball of Duty event built using Jinja2, Flask, and PyMySQL, and a lot of AJAX</h1>

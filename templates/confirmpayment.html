@@ -7,6 +7,33 @@
             var repass = document.getElementById("repassphrase").value;
             console.log(teamname);
             console.log(repass);
+            
+            var data = {
+                teamname: teamname,
+                repass: repass
+            }
+            
+            $.ajax({
+                url: "./confirmteampayment",
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    if(response.success == 'true')
+                    {
+                        Materialize.toast('<p class = "flow-text green-text">' + response.message + '</p>', 2000)  
+                        setTimeout(function() {window.location.reload()}, 3000);
+                    }
+                    else
+                    {
+                        Materialize.toast('<p class = "flow-text red-text">' + response.message + '</p>', 2000)
+                    }
+                },
+                error: function (error) {
+                    Materialize.toast('<p class = "flow-text red-text">' + error + '</p>', 2000)
+                }
+            })
         }
     function enterphrase() {
         var data = {
@@ -41,7 +68,7 @@
         <div class="col s12">
             <div id="state">
                 <div class="card">
-                    <div class="card-title">Confirm payment login</div>
+                    <div class="card-title center-align">Confirm payment login</div>
                     <div class="card-content">
                         <div class="input-field">
                             <label for="passphrase">Enter passphrase: </label>
