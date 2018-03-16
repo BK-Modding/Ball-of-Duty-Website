@@ -1,1 +1,1 @@
-<h1>Website for the Sports for Change event built using Jinja2, Flask, and PyMySQL, and a lot of AJAX</h1>
+<h1>Website for the Sports for Change event built using Jinja2, Flask, PyMySQL, and a lot of AJAX</h1>
