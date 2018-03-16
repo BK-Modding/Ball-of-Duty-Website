@@ -74,11 +74,11 @@ def register():
         
                 connection.commit()
             
-                msg = Message('We have a new registration for Ball of Duty', sender = config.MAIL_USERNAME, recipients = config.MAIL_RECIPIENTS)
+                msg = Message([])
                 msg.body = "Team name: {} \n Registration Person: {} \n No. of members in the team: {} \n Member Names: {} \n Mobile no: {} \n Alternate no: {} \n Payment mode chosen: {}".format(teamname, registername, noofmembers, membernames, mobileno, alternateno, paymentmode)
                 mail.send(msg)
             
-                msg2 = Message('Confirming your registration for Ball of Duty', sender = 'ball.of.duty.bangalore@gmail.com', recipients = [email])
+                msg2 = Message('Confirming your registration for Ball of Duty', sender = 'ball.of.duty.bangalore@gmail.com', recipients = [config.RECIPIENT_1, config.RECIPEINT_2, config.RECIPIENT_3, config.RECIPIENT_4, config.RECIPIENT_5])
                 paymsg = ''
                 if paymentmode == "payTM":
                     paymsg = "You have chosen to pay the registration fee through PayTM. To make the PayTM payment for the event, please pay Samaksh Goel of IBDP 1 studying in Oakridge International School. His mobile no. is +919036492611"
