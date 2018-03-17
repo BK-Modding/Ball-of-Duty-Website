@@ -13,8 +13,9 @@
             var email = document.getElementById("footballemail").value;
             var mobileno = document.getElementById("footballmobileno").value;
             var alternateno = document.getElementById("footballalternateno").value;
+            var jerseycolor = document.getElementById("footballjerseycolor").value;
             var paymenttype = $('input[name=footballpaygroup]:checked').val();
-            if(registername.length > 0 && teamname.length > 0 && (noofmembers >= 5 && noofmembers <= 9) && membernames.length > 0 && email.length > 0 && mobileno.length == 10 && alternateno.length == 10 && paymenttype.length > 0)
+            if(registername.length > 0 && teamname.length > 0 && (noofmembers >= 5 && noofmembers <= 9) && membernames.length > 0 && email.length > 0 && mobileno.length == 10 && alternateno.length == 10 && paymenttype.length > 0 && jerseycolor.length > 0)
             {
                 if(!(membernames.length == noofmembers))
                 {
@@ -43,6 +44,7 @@
                             email : email,
                             mobileno : mobileno,
                             alternateno : alternateno,
+                            jerseycolor : jerseycolor,
                             paymenttype: paymenttype
                         };
 
@@ -174,6 +176,11 @@
                         <div class="input-field">
                             <label for="footballalternateno">Alternate Mobile no.</label>
                             <input type="number" required class="validate" name="footballalternateno" id="footballalternateno" placeholder="Alternate Mobile no.">
+                        </div>
+                        
+                        <div class="input-field">
+                            <label for="footballjerseycolor">Team jersey color</label>
+                            <input type="text" required class="validate" name="footballjerseycolor" id="footballjerseycolor" placeholder="Team jersey color">
                         </div>
 
                         <p>
