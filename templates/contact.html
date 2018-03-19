@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+{% block content %}
+<script type = "text/javascript">
+    function submitquery()
+    {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var question = document.getElementById("question").value;
+        var detail = document.getElementById("detail").value;
+        if(name.length > 0 && email.length > 0 && question.length > 0 && detail.length > 0)
+        {
+            var data = {
+                name: name,
+                email: email,
+                question: question,
+                detail: detail
+            }
+            
+            $.ajax({
+                url: "./submitquery",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    if(response.status == 'true')
+                    {
+                        Materialize.toast('<p class = "flow-text green-text">Query submitted successfully</p>', 3000);   
+                        document.getElementById("successcard").innerHTML = '<div class = "card-content">Thank you for submitting the query. You should have received a confirmation email containing more details regarding the same.</div>'
+                    }
+                    else
+                    {
+                        Materialize.toast('<p class = "flow-text red-text">Some error in submitting the query :(</p>', 3000);
+                    }
+                },
+                error: function (error) {
+                    Materialize.toast('<p class = "flow-text red-text">' + error + '</p>', 3000)
+                }
+            })
+        }
+        else
+        {
+            Materialize.toast('<p class = "flow-text red-text">Error, some fields are not filled.</p>', 3000);
+        }
+    }
+</script>
+<div class = "container">
+    <div class = "row">
+        <div class = "col s12">
+            <div class = "card">
+                <div class = "card-title center-align">Contact us</div>
+                <div class = "card-content">
+                    <div class = "input-field">
+                        <label for = "name">Name</label>
+                        <input type = "text" name = "name" id = "name" class = "validate" required>
+                    </div>
+                    <div class = "input-field">
+                        <label for = "email">Email</label>
+                        <input type = "email" name = "email" id = "email" class = "validate" required>
+                    </div>
+                    <div class = "input-field">
+                        <label for = "question">Your Question</label>
+                        <input type = "text" name = "question" id = "question" class = "validate" required>
+                    </div>
+                    <div class = "input-field">
+                        <textarea id="detail" class="materialize-textarea"></textarea>
+                        <label for="detail">Please explain your question in detail</label>
+                    </div>
+                    
+                    <div class = "row">
+                        <div class = "col s12 center-align">
+                            <a class = "btn blue waves-effect hoverable" onclick = "submitquery()">Submit</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div id = "successcard" class = "card">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

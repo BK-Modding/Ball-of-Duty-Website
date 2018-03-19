@@ -1,0 +1,95 @@
+{% extends "layout.html" %} 
+{% block content %}
+<script type="text/javascript">
+    function paid() 
+    {
+        var name = document.getElementById("name").value;
+        var repass = document.getElementById("repassphrase").value;
+        var sport = document.getElementById("game").value;
+        console.log(name);
+        console.log(repass);
+
+        if(sport.length < 1)
+        {
+            Materialize.toast('<p class = "flow-text red-text">Error, no game/sport chosen</p>', 2000)
+        }
+        else
+        {
+            var data = {
+                name: name,
+                sport: sport,
+                repass: repass
+            }
+
+            $.ajax({
+                url: "./confirmpayment",
+                type: "POST",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (response) {
+                    if(response.success == 'true')
+                    {
+                        Materialize.toast('<p class = "flow-text green-text">' + response.message + '</p>', 2000)  
+                        setTimeout(function() {window.location.reload()}, 3000);
+                    }
+                    else
+                    {
+                        Materialize.toast('<p class = "flow-text red-text">' + response.message + '</p>', 2000)
+                    }
+                },
+                error: function (error) {
+                    Materialize.toast('<p class = "flow-text red-text">' + error + '</p>', 2000)
+                }
+            })   
+        }
+    }
+    function enterphrase() {
+        var data = {
+            passphrase: document.getElementById("passphrase").value
+        } 
+
+        $.ajax({
+            url: "./checkpass",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            dataType: "json",
+            success: function (response) {
+                if(response.correct == 'true')
+                {
+                    Materialize.toast('<p class = "flow-text green-text">Logged in successfully</p>', 2000)
+                    document.getElementById('state').innerHTML = '<div class = "card"> <div class = "card-content"> <div class = "input-field"> <label for = "name">Name/Team name</label> <input type = "text" name = "name" id = "name" placeholder = "Name/Team name"> </div> <div class = "input-field"> <label for = "repassphrase">Reenter pass phrase</label> <input type = "text" name = "repassphrase" id = "repassphrase" placeholder = "Reenter pass phrase"/> </div> <div class="input-field"> <select id = "game"> <option value="" selected>Choose the sport/game</option> <option value="football">Football</option> <option value="basketball">Basketball</option> <option value="chess">Chess</option> </select> <label>Choose the sport/game</label> </div> <a onclick = "paid()" class = "btn red waves-effect hoverable">Confirm</a> </div></div>';
+                    $('select').material_select();
+                }
+                else
+                {
+                    Materialize.toast('<p class = "flow-text red-text">Error, invalid passphrase</p>', 3000);
+                }
+            },
+            error: function (error) {
+                Materialize.toast('<p class = "flow-text red-text">' + error + '</p>', 3000)
+            }
+        });
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <div id="state">
+                <div class="card">
+                    <div class="card-title center-align">Confirm payment login</div>
+                    <div class="card-content">
+                        <div class="input-field">
+                            <label for="passphrase">Enter passphrase: </label>
+                            <input type="password" name="passphrase" id="passphrase">
+                        </div>
+                        <a onclick = "enterphrase();" class="btn waves-effect teal">Enter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

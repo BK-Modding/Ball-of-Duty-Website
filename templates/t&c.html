@@ -1,26 +1,36 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block bodytag %}
 
-{% block bodytag %}<body class = "grey lighten-2">{% endblock %}
+<body class="">{% endblock %} {% block content %}
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" media="screen,projection" />
+    <div class="container">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row">
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-title center-align flow-text">Terms and Conditions</div>
+                    <ul class="tabs" style="overflow-x: hidden">
+                        <li class="tab col s4"><a class="active" href="#football">Football</a></li>
+                        <li class="tab col s4"><a href="#basketball">Basketball</a></li>
+                        <li class="tab col s4"><a href="#chess">Chess</a></li>
+                    </ul>
 
-{% block content %}
-    <div class = "container">
-        <div class = "row"></div>
-        <div class = "row"></div>
-        <div class = "row"></div>
-        <div class = "row">
-            <div class = "col s12">
-                <div class = "card">
-                    <div class = "card-title center-align flow-text">Terms and Conditions</div>
-                    <div class = "card-content">
-                        <ol>
-                            <li>No foul language No foul languageNo foul languageNo foul languageNo foul languageNo foul languageNo foul language</li>
-                            <li>No urmom and fingering</li>
-                            <li>Pay up before coming</li>
-                            <li>I HAVE PSYCH! :(</li>
-                        </ol>
+                    <div class="card-content">
+                        <div id="football">
+                            <ol>
+                                <li>No Foul <strong>Language</strong>, <strong>Threatening</strong>, or <strong>Fighting</strong>.</li>
+                                <li>If in case of any <strong>Emergencies</strong>, you will have to inform us 5 days in prior, that is, on or before 9th of April. In this case, you will be liable to recieve 50% of the amount paid. Any <strong>Cancellations</strong> after that will <strong>Not</strong> be <strong>Eligible</strong> for a <strong>Refund</strong>.</li>
+                                <li>The <strong>Maximum</strong> numbers of subs you can have is , but only 5 players from the same team can be on the court at the same time, as it is teams of 5. If you bring only 5 members (4+1), we will not be able to provide substitutes.</li>
+                                <li>You don't have to bring your own equipment, though we would suggest some light snacks if you want.</li>
+                                <li>The referees' words are absolute. You'll be sent off if you protest the call too much.</li>
+                            </ol>
+                        </div>
+                        <div id="basketball">Coming Soon!</div>
+                        <div id="chess">Coming Soon!</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-{% endblock %}
+    {% endblock %}

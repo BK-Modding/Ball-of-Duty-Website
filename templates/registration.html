@@ -1,11 +1,277 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block content %}
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" media="screen,projection" />
+<script type="text/javascript">
+    function register(sport) {
+        console.log(sport);
 
-{% block content %}
-    <div class = "container">
-        <div class = "row">
-            <div class = "col s12">
-                Kappa
+        if(sport == 'football')
+        {
+            var registername = document.getElementById("footballregistermember").value;
+            var teamname = document.getElementById("footballteamname").value;
+            var noofmembers = document.getElementById("footballmembers").value;
+            var membernames = document.getElementById("footballmembernames").value.split(",");
+            var email = document.getElementById("footballemail").value;
+            var mobileno = document.getElementById("footballmobileno").value;
+            var alternateno = document.getElementById("footballalternateno").value;
+            var paymenttype = $('input[name=footballpaygroup]:checked').val();
+            if(registername.length > 0 && teamname.length > 0 && (noofmembers >= 5 && noofmembers <= 9) && membernames.length > 0 && email.length > 0 && mobileno.length == 10 && alternateno.length == 10 && paymenttype.length > 0)
+            {
+                if(!(membernames.length == noofmembers))
+                {
+                    Materialize.toast("<p class = 'red-text'>Error, the no. of members entered does not match the number of member names</p>", 2000)
+                }
+                else
+                {
+                    if(mobileno == alternateno)
+                    {
+                        Materialize.toast("<p class = 'red-text'>Error, the registering mobile no. and the alternate mobile no. must be different</p>", 2000)
+                    }
+                    else
+                    {
+                        for(let member of membernames)
+                        {
+                            membernames[membernames.indexOf(member)] = member.trim();
+                        }
+
+                        //console.log(membernames);
+
+                        var registerdata = {
+                            registername: registername,
+                            teamname: teamname,
+                            noofmembers: noofmembers,
+                            membernames: membernames,
+                            email : email,
+                            mobileno : mobileno,
+                            alternateno : alternateno,
+                            paymenttype: paymenttype
+                        };
+
+                        $.ajax({
+                            url: './register/football',
+                            dataType: "json",
+                            data: JSON.stringify(registerdata),
+                            contentType: "application/json",
+                            type: 'POST',
+                            success: function(response) {
+                                console.log(response);
+                                if(response.Status == "Registered")
+                                {
+                                    Materialize.toast("<p class = 'green-text'>You've successfully registered, please complete the payment to confirm your registration</p>", 2000);
+                                    document.getElementById("footballregistercomplete").innerHTML = '<div class = "card-content white-text purple center-align">Thank you for your registration, an email regarding further details and actions to be taken to complete your payment has been sent to the registered email account.</div>';   
+                                }
+                                else
+                                {
+                                    Materialize.toast('<p class = "flow-text red-text">' + response.Message + '</p>', 2000)
+                                }
+                            },
+                            error: function(error) {
+                                Materialize.toast("<p class = 'red-text'>" + error + "</p>", 2000)
+                            }
+                        });     
+                    }
+                }
+            }
+            else
+            {
+                Materialize.toast("<p class = 'red-text'>Error, some fields are not filled or are filled incorrectly</p>", 2000);
+            }   
+        }
+        else if(sport == 'chess')
+        {
+            var name = document.getElementById("chessname").value;
+            var age = document.getElementById("chessage").value;
+            var email = document.getElementById("chessemail").value;
+            var mobileno = document.getElementById("chessmobile").value;
+            var category = document.getElementById("chesscategory").value;
+            var UKCAID = document.getElementById("UKCAID").checked;
+            var paymenttype = $('input[name=chesspaygroup]:checked').val();
+            if(name.length > 0 && age.length > 0 && (age > 1 && age < 17) && email.length > 0 && mobileno.length == 10 && category != "")
+            {
+                if((age <= 8 && category == "u8") || (age <= 12 && category == "u12") || (age <= 16 && category == "u16"))
+                {
+                    var data = {
+                        name: name,
+                        age: age,
+                        email: email,
+                        mobileno: mobileno,
+                        category: category,
+                        UKCAID: UKCAID,
+                        paymenttype: paymenttype
+                    }
+                    
+                    $.ajax({
+                        url: "./register/chess",
+                        type: "POST",
+                        dataType: "json",
+                        contentType: "application/json",
+                        data: JSON.stringify(data),
+                        success: function (response) {
+                            console.log(response);
+                            if(response.Status == "Registered")
+                            {
+                                Materialize.toast("<p class = 'green-text'>You've successfully registered, please complete the payment to confirm your registration</p>", 2000);
+                                document.getElementById("chessregistercomplete").innerHTML = '<div class = "card-content white-text purple center-align">Thank you for your registration, an email regarding further details and actions to be taken to complete your payment has been sent to the registered email account.</div>';   
+                            }
+                            else
+                            {
+                                Materialize.toast('<p class = "flow-text red-text">' + response.Message + '</p>', 2000)
+                            }
+                        },
+                        error: function (error) {
+                            Materialize.toast('<p class = "flow-text red-text">' + error + '</p>', 2000)
+                        }
+                    })
+                }
+                else
+                {
+                    Materialize.toast('<p class = "red-text">Error, The entered age and the age group does not match</p>', 2000)
+                }
+            }
+            else
+            {
+                Materialize.toast('<p class = "red-text">Error, some fields are not filled or are filled incorrectly</p>', 2000)
+            }
+        }
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <div class="card">
+                <div class="card-title flow-text center-align">Register for the event</div>
+                <div class="card-content">
+                    <ul class="tabs" style="overflow-x: hidden">
+                        <li class="tab col s4"><a class = "active" href="#football">Football</a></li>
+                        <li class="tab col s4"><a href="#chess">Chess</a></li>
+                        <li class="tab col s4"><a href="#basketball">Basketball</a></li>
+                    </ul>
+                    <div id="football">
+                        <div class="input-field">
+                            <label for="footballregistermember">Name of person registering</label>
+                            <input type="text" required validate name="footballregistermember" id="footballregistermember" placeholder="Name of person registering">
+                        </div>
+                        <div class="input-field">
+                            <label for="footballteamname">Team name</label>
+                            <input type="text" required class="validate" name="footballteamname" id="footballteamname" placeholder="Team name">
+                        </div>
+                        <div class="input-field">
+                            <label for="footballmembers">No. of members (5 to 9)</label>
+                            <input type="number" required class="validate" max=9 min=5 name="footballmembers" id="footballmembers" placeholder="No. of members" maxlength=9>
+                        </div>
+                        <div class="input-field">
+                            <label for="footballmembernames">Names of members (separated by a comma)</label>
+                            <input type="text" required class="validate" name="footballmembernames" id="footballmembernames" placeholder="Names of members (separated by a comma)">
+                        </div>
+                        <div class="input-field">
+                            <label for="footballemail">Email of the person registering</label>
+                            <input type="email" required class="validate" name="footballemail" id="footballemail" placeholder="Email of the person registering">
+                        </div>
+                        <div class="input-field">
+                            <label for="footballmobileno">Mobile no. of the person registering</label>
+                            <input type="number" required class="validate" name="footballmobileno" id="footballmobileno" placeholder="Mobile no. of the person registering">
+                        </div>
+
+                        <div class="input-field">
+                            <label for="footballalternateno">Alternate Mobile no.</label>
+                            <input type="number" required class="validate" name="footballalternateno" id="footballalternateno" placeholder="Alternate Mobile no.">
+                        </div>
+                        
+                        <p>
+                            <input name="footballpaygroup" type="radio" value = "cash" id="cash" />
+                            <label for="cash">Cash</label>
+                        </p>
+                        <p>
+                            <input checked="checked" name="footballpaygroup" value = "payTM" type="radio" id="payTM" />
+                            <label for="payTM">PayTM</label>
+                        </p>
+
+                        <br>
+
+                        Before you register, we recommend you read the <a href = "/termsandconditions">Terms and conditions</a>
+                        <br>
+                        <br>
+                        <br>
+                        <div class = "row">
+                            <div class = "col s12 center-align">
+                                <a class="btn blue" onclick="register('football');">Register</a>
+                            </div>
+                        </div>
+                        <br>
+                        <div id = "footballregistercomplete" class = "card">
+                        </div>
+                    </div>
+                    <div id="basketball">
+                        <p class = "flow-text center-align">Registrations will open soon</p>
+                    </div>
+                    <div id="chess">
+                        <p class = "flow-text center-align">Registrations will open soon</p>
+                        <!-- <div class = "input-field">
+                            <label for = "chessname">Name</label>
+                            <input required class = "validate" type = "text" name = "chessname" id = "chessname" placeholder = "Name">
+                        </div>
+                        <div class = "input-field">
+                            <label for = "chessemail">Email</label>
+                            <input required class = "validate" type = "email" name = "chessemail" id = "chessemail" placeholder = "Email">
+                        </div>
+                        <div class = "input-field">
+                            <label for = "chessmobile">Mobile No.</label>
+                            <input required class = "validate" type = "number" name = "chessmobile" id = "chessmobile" placeholder = "Mobile No.">
+                        </div>
+                        <div class = "input-field">
+                            <label for = "chessage">Age</label>
+                            <input required class = "validate" type = "number" name = "chessage" id = "chessage" placeholder = "Age">
+                        </div>
+
+                        <div class="input-field">
+                            <select id = "chesscategory">
+                                <option value="" selected>Choose your category</option>
+                                <option value="u8">Under 8</option>
+                                <option value="u12">Under 12</option>
+                                <option value="u16">Under 16</option>
+                            </select>
+                            <label>Choose your category</label>
+                        </div>
+
+                        <p>
+                            <input type="checkbox" id="UKCAID" />
+                            <label for="UKCAID">United Karnataka Chess Association ID</label>
+                        </p>
+                        
+                        <br>
+                        
+                        <div class = "card">
+                            <div class = "card-content green white-text">
+                                If you do not possess an UKCA ID, you need to pay Rs. 50 extra along with the registration fee
+                            </div>
+                        </div>
+
+                        <p>
+                            <input name="chesspaygroup" type="radio" value = "cash" id="cash" />
+                            <label for="cash">Cash</label>
+                        </p>
+                        <p>
+                            <input checked="checked" name="chesspaygroup" value = "payTM" type="radio" id="payTM" />
+                            <label for="payTM">PayTM</label>
+                        </p>
+
+                        <br>
+
+                        Before you register, we recommend you read the <a href = "/termsandconditions">Terms and conditions</a>
+                        <br>
+                        <br>
+                        <br>
+                        <div class = "row">
+                            <div class = "col s12 center-align">
+                                <a class="btn blue disabled" onclick="register('chess');">Register</a>
+                            </div>
+                        </div>
+                        <br>
+                        <div id = "chessregistercomplete" class = "card">
+                        </div> -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
