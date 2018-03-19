@@ -35,9 +35,9 @@
                                 {
                                     haspaidstr = "No";
                                 }
-                                tabledata += "<tr><td>" + response.teams[i].RegistrationPerson + "</td><td>" + response.teams[i].TeamName + "</td><td>" + response.teams[i].NoOfMembers + "</td><td>" + response.teams[i].MemberNames + "</td><td>" + response.teams[i].PaymentMode + "</td><td>" + response.teams[i].MobileNo + "</td><td>" + response.teams[i].AlternateNo + "</td><td>" + response.teams[i].Email + "</td><td>" + response.teams[i].JerseyColor + "</td><td>" + haspaidstr + "</td></tr>"	
+                                tabledata += "<tr><td>" + response.teams[i].RegistrationPerson + "</td><td>" + response.teams[i].TeamName + "</td><td>" + response.teams[i].NoOfMembers + "</td><td>" + response.teams[i].MemberNames + "</td><td>" + response.teams[i].PaymentMode + "</td><td>" + response.teams[i].MobileNo + "</td><td>" + response.teams[i].AlternateNo + "</td><td>" + response.teams[i].Email + "</td><td>" + haspaidstr + "</td></tr>"	
                             }
-                            document.getElementById("status").innerHTML = '<div class = "card"><div class = "card-content"><table class = "striped bordered responsive-table"><thead><tr><td><b>Registration Person</b></td><td><b>Team Name</b></td><td><b>No. of members</b></td><td><b>Member Names</b></td><td><b>Payment Mode</b></td><td><b>Mobile no.</b></td><td><b>Alternate no.</b></td><td><b>Email</b></td><td><b>Jersey Color</b></td><td><b>Has Completed Payment</b></td></tr></thead><tbody>' + tabledata + '</tbody><table></div></div>';
+                            document.getElementById("status").innerHTML = '<div class = "card"><div class = "card-content"><table class = "striped bordered responsive-table"><thead><tr><td><b>Registration Person</b></td><td><b>Team Name</b></td><td><b>No. of members</b></td><td><b>Member Names</b></td><td><b>Payment Mode</b></td><td><b>Mobile no.</b></td><td><b>Alternate no.</b></td><td><b>Email</b></td><td><b>Has Completed Payment</b></td></tr></thead><tbody>' + tabledata + '</tbody><table></div></div>';
 
                         }
                         else if(document.getElementById("game").value == "chess")

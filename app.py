@@ -52,7 +52,6 @@ def register(sport):
                 print(data)
                 existflag = 0
                 existflag2 = 0
-                jerseyflag = 0
                 with connection.cursor() as cursor:
                     existquery = '''SELECT * FROM footballregistrations WHERE TeamName="%s"'''
                     existquery2 = '''SELECT * FROM footballregistrations WHERE Email="%s"'''
@@ -66,17 +65,11 @@ def register(sport):
                     
                     allquery = '''SELECT * FROM footballregistrations'''
                     cursor.execute(allquery)
-                    for i in cursor.fetchall():
-                        if i['JerseyColor'] == data['jerseycolor'].lower():
-                            jerseyflag = 1
-                            break
             
                 if existflag == 1:
                     return json.dumps({'Status':'Not Registered', 'Message': 'Error, that team name already exists'})
                 elif existflag2 == 1:
                     return json.dumps({'Status':'Not Registered', 'Message': 'Error, that email already exists'})
-                elif jerseyflag == 1:
-                    return json.dumps({'Status':'Not Registered', 'Message': 'Error, that jersey color is taken'})
                 else:
                     teamname = data['teamname']
                     membernames = ",".join(data['membernames'])
@@ -87,17 +80,16 @@ def register(sport):
                     alternateno = data['alternateno']
                     email = data['email']
                     noofmembers = data['noofmembers']
-                    jerseycolor = data['jerseycolor'].lower()
                     with connection.cursor() as cursor:
-                        query = '''INSERT INTO footballregistrations (TeamName, MemberNames, RegistrationPerson, PaymentMode, MobileNo, AlternateNo, Email, NoOfMembers, JerseyColor) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)''' #.format(teamname, membernames, registername, paymentmode, mobileno, alternateno, email, noofmembers)
+                        query = '''INSERT INTO footballregistrations (TeamName, MemberNames, RegistrationPerson, PaymentMode, MobileNo, AlternateNo, Email, NoOfMembers) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)''' #.format(teamname, membernames, registername, paymentmode, mobileno, alternateno, email, noofmembers)
                         print(query)
-                        insertdata = (teamname, membernames, registername, paymentmode, mobileno, alternateno, email, noofmembers, jerseycolor)
+                        insertdata = (teamname, membernames, registername, paymentmode, mobileno, alternateno, email, noofmembers)
                         cursor.execute(query, insertdata)
         
                     connection.commit()
             
                     msg = Message('We have a new registration under Football for Sports for Change', sender = config.MAIL_USERNAME, recipients = [config.RECIPIENT_1, config.RECIPIENT_2, config.RECIPIENT_3, config.RECIPIENT_4, config.RECIPIENT_5])
-                    msg.body = "Team name: {} \nRegistration Person: {}\nNo. of members in the team: {}\nMember Names: {}\nMobile no: {}\nAlternate no: {} \nPayment mode chosen: {} \nJersey color: {}".format(teamname, registername, noofmembers, membernames, mobileno, alternateno, paymentmode, jerseycolor)
+                    msg.body = "Team name: {} \nRegistration Person: {}\nNo. of members in the team: {}\nMember Names: {}\nMobile no: {}\nAlternate no: {} \nPayment mode chosen: {}".format(teamname, registername, noofmembers, membernames, mobileno, alternateno, paymentmode)
                     mail.send(msg)
             
                     msg2 = Message('Confirming your registration for Sports for Change', sender = config.MAIL_USERNAME, recipients = [data['email']])
