@@ -290,10 +290,11 @@ def contactus():
 def submitquery():
     if request.method == "POST":
         data = request.get_json()
-        name = data.name
-        email = data.email
-        question = data.question
-        detail = data.detail
+        print(data)
+        name = data['name']
+        email = data['email']
+        question = data['question']
+        detail = data['detail']
         
         msg = Message('A new query regarding Sports for Change', sender = config.MAIL_USERNAME, recipients = [config.RECIPIENT_1, config.RECIPIENT_2, config.RECIPIENT_3, config.RECIPIENT_4, config.RECIPIENT_5])
         msg.body = "Name: {} \nEmail: {} \nQuestion: {} \nQuery in detail: {} \n \nPlease reply to the above email to resolve the query".format(name, email, question, detail)
@@ -303,7 +304,11 @@ def submitquery():
         msg.body = "This is to confirm that you've submitted a query for the Sports for Change event asking {}. One of our representatives will get back to you shortly regarding the query. Please expect to receive a return mail to this email address".format(question)
         mail.send(msg)
         
-        return "kappa"
+        return json.dumps({'status':'true'})
+
+@app.route('/sponsors')
+def sponsors():
+    return render_template('sponsors.html')
         
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
