@@ -184,7 +184,11 @@ def checkpass():
             return json.dumps({'correct': 'true'})
         else:
             return json.dumps({'correct':'false'})
-            
+        
+    
+@app.route('/aboutus')
+def aboutus():
+    return render_template('aboutus.html')
             
 @app.route('/getallregistrations')
 def getallteams():
@@ -300,6 +304,6 @@ def submitquery():
 @app.route('/sponsors')
 def sponsors():
     return render_template('sponsors.html')
-        
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
